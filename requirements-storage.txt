@@ -1,0 +1,2 @@
+-r requirements.lock
+django-storages[s3]>=1.14,<2

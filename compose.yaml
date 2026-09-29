@@ -1,0 +1,46 @@
+services:
+  scanner:
+    image: clamav/clamav:stable
+    profiles: [document-scanning]
+    restart: unless-stopped
+    volumes:
+      - scanner_signatures:/var/lib/clamav
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: brokerage
+      POSTGRES_USER: brokerage
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U brokerage"]
+      interval: 5s
+      retries: 10
+    restart: unless-stopped
+  web:
+    build: .
+    env_file: .env
+    command: sh -c "python manage.py migrate --noinput && python manage.py collectstatic --noinput && python manage.py bootstrap && waitress-serve --listen=0.0.0.0:8000 --threads=8 config.wsgi:application"
+    ports:
+      - "127.0.0.1:8000:8000"
+    volumes:
+      - vehicle_files:/app/storage
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+  worker:
+    build: .
+    env_file: .env
+    command: python manage.py process_jobs --loop
+    volumes:
+      - vehicle_files:/app/storage
+    depends_on:
+      web:
+        condition: service_started
+    restart: unless-stopped
+volumes:
+  postgres_data:
+  vehicle_files:
+  scanner_signatures:

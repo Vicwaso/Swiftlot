@@ -1,0 +1,12 @@
+.env
+.venv/
+__pycache__/
+*.py[cod]
+*.sqlite3
+.local-secret
+.bootstrap-token
+storage/
+staticfiles/
+backups/
+*.log
+test-results/

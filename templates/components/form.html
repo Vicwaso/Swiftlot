@@ -1,0 +1,1 @@
+{% if form.non_field_errors %}<div class="error-summary" role="alert">{{ form.non_field_errors }}</div>{% endif %}{% for field in form %}{% if field.name == 'facebook_url' %}<h2>Social media</h2><p class="help">Only profiles you add will appear in the website footer and on the contact page.</p>{% endif %}{% include 'components/field.html' %}{% endfor %}
