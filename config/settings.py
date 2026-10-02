@@ -17,8 +17,15 @@ if not SECRET_KEY:
         from django.core.management.utils import get_random_secret_key
         secret_file.write_text(get_random_secret_key(), encoding='utf-8')
     SECRET_KEY = secret_file.read_text(encoding='utf-8').strip()
-ALLOWED_HOSTS = ['localhost','127.0.0.1'] if LOCAL_ONLY else os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+render_hostname = os.getenv('RENDER_EXTERNAL_HOSTNAME', '').strip()
+ALLOWED_HOSTS = ['localhost','127.0.0.1'] if LOCAL_ONLY else [s for s in os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',') if s]
+if render_hostname and render_hostname not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS.append(render_hostname)
 CSRF_TRUSTED_ORIGINS = [s for s in os.getenv('CSRF_TRUSTED_ORIGINS', '').split(',') if s]
+if render_hostname:
+    render_origin = f'https://{render_hostname}'
+    if render_origin not in CSRF_TRUSTED_ORIGINS:
+        CSRF_TRUSTED_ORIGINS.append(render_origin)
 INSTALLED_APPS = [
     'django.contrib.auth', 'django.contrib.contenttypes', 'django.contrib.sessions',
     'django.contrib.messages', 'django.contrib.staticfiles', 'django.contrib.humanize',
@@ -101,7 +108,8 @@ EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'true') == 'true'
 EMAIL_TIMEOUT = 15
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', '')
 MFA_REQUIRED = os.getenv('MFA_REQUIRED', 'true').lower() == 'true'
-PUBLIC_ORIGIN = os.getenv('PUBLIC_ORIGIN', 'http://127.0.0.1:8000').rstrip('/')
+PUBLIC_ORIGIN = os.getenv('PUBLIC_ORIGIN') or (f'https://{render_hostname}' if render_hostname else 'http://127.0.0.1:8000')
+PUBLIC_ORIGIN = PUBLIC_ORIGIN.rstrip('/')
 CLAMAV_HOST = os.getenv('CLAMAV_HOST', '')
 CLAMAV_PORT = int(os.getenv('CLAMAV_PORT', '3310'))
 LOGGING = {'version': 1, 'disable_existing_loggers': False,

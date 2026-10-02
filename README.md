@@ -54,5 +54,11 @@ Consumers browse and enquire without accounts. They cannot upload/edit listings 
 
 Supply a domain/hosting account, business identity, currency, actual vehicle data/photos, approved policies and SMTP credentials. Configure PostgreSQL, HTTPS, durable storage, backups and a running worker. Run `python manage.py check --deploy` and `python manage.py launch_check`, then perform a restore rehearsal and browser acceptance checks. No online payment gateway or automatic legal ownership transfer is included.
 
+## Render preview
+
+The included `render.yaml` creates a free web service and a free PostgreSQL database in Frankfurt. It runs migrations, installs roles, serves the website and runs the small notification/expiry worker alongside the web process. On the first deploy, copy the one-time owner setup URL from the Render logs and use it immediately. The URL stops working after the owner account is created.
+
+Render's free database expires after 30 days, and free web services do not support persistent disks. Use this configuration for evaluation only. Before adding real stock, upgrade the database and web service and attach a persistent disk mounted at `/var/data`, with `MEDIA_ROOT=/var/data/storage`, or configure the supplied S3-compatible storage option. Configure email using a provider/port permitted by Render.
+
 
 Vehicle inquiry alerts are emailed to the active staff member who originally added the vehicle, using their staff account email. Later assignment changes do not change the recipient. Existing creators are recovered from creation audit events. Missing creator email retains an in-app notification; unknown/inactive creators and general contact inquiries use the website notification email. Configure SMTP and run process_jobs for delivery; failed sends retry automatically.

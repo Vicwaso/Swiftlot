@@ -173,7 +173,7 @@ def staff_logout(request):
 
 def setup_owner(request,token):
     token_file=settings.BASE_DIR/'.bootstrap-token'
-    if not settings.DEBUG or get_user_model().objects.filter(is_superuser=True).exists() or not token_file.exists(): raise Http404
+    if get_user_model().objects.filter(is_superuser=True).exists() or not token_file.exists(): raise Http404
     if not hmac.compare_digest(token,token_file.read_text().strip()): raise Http404
     form=OwnerForm(request.POST or None)
     if request.method=='POST' and form.is_valid():

@@ -20,8 +20,7 @@ class Command(BaseCommand):
             group.permissions.set(Permission.objects.filter(content_type__app_label='brokerage',codename__in=permissions))
         SiteSettings.current()
         self.stdout.write('Staff roles and website settings are ready.')
-        if settings.DEBUG and not get_user_model().objects.filter(is_superuser=True).exists():
+        if not get_user_model().objects.filter(is_superuser=True).exists():
             file=settings.BASE_DIR/'.bootstrap-token'
             if not file.exists(): file.write_text(secrets.token_urlsafe(32))
             self.stdout.write('One-time owner setup: '+settings.PUBLIC_ORIGIN+'/staff/setup/'+file.read_text().strip()+'/')
-        elif not get_user_model().objects.filter(is_superuser=True).exists(): self.stdout.write('Create the owner with: python manage.py createsuperuser')
