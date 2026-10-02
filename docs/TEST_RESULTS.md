@@ -36,3 +36,5 @@ Theme switch correction (29 September 2026): verified in the running browser tha
 Vehicle creator notification routing: four tests passed for public submission/idempotency, missing email, inactive creator fallback and worker delivery using a test email backend. Live SMTP is not configured; no actual email delivery claimed.
 
 Mobile layout correction (2 October 2026): verified the inventory and vehicle-detail pages at 320px and 360px browser widths. The document width remained inside the viewport; the photo thumbnails retain their own intentional horizontal scroller. The header, title, price, main image, specifications and enquiry form stack within the phone viewport. Django system checks and the public-page smoke test passed.
+
+Mobile gallery sizing: the main vehicle photo uses a fixed responsive frame between 220px and 300px high on phones, with centred cover cropping for both portrait and landscape uploads. At a 360px viewport the frame measured 313 × 245px, `object-fit: cover` was active, and the document remained within the viewport.
