@@ -1,0 +1,32 @@
+services:
+  - type: web
+    name: swiftlot
+    runtime: python
+    plan: free
+    region: frankfurt
+    buildCommand: pip install -r requirements.lock && python manage.py collectstatic --noinput
+    startCommand: python manage.py migrate --noinput && python manage.py bootstrap && (python manage.py process_jobs --loop &) && waitress-serve --listen=0.0.0.0:$PORT --threads=8 config.wsgi:application
+    healthCheckPath: /
+    envVars:
+      - key: DEBUG
+        value: "false"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: swiftlot-db
+          property: connectionString
+      - key: TIME_ZONE
+        value: Africa/Nairobi
+      - key: MFA_REQUIRED
+        value: "true"
+      - key: TRUST_PROXY
+        value: "true"
+
+databases:
+  - name: swiftlot-db
+    databaseName: swiftlot
+    user: swiftlot
+    plan: free
+    region: frankfurt
+    postgresMajorVersion: "17"
