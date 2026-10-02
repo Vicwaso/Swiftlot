@@ -34,3 +34,5 @@ Run the same tests against an isolated PostgreSQL database, `check --deploy`, an
 Theme switch correction (29 September 2026): verified in the running browser that the dark palette changes the body from white to RGB(21, 34, 29), the pointer and Space key toggle the switch, and dark mode survives reload. Versioned CSS/JS URLs prevent stale cached styles. Node checks cover stored preferences, system defaults, storage denial, cross-tab updates and initialization after DOMContentLoaded.
 
 Vehicle creator notification routing: four tests passed for public submission/idempotency, missing email, inactive creator fallback and worker delivery using a test email backend. Live SMTP is not configured; no actual email delivery claimed.
+
+Mobile layout correction (2 October 2026): verified the inventory and vehicle-detail pages at 320px and 360px browser widths. The document width remained inside the viewport; the photo thumbnails retain their own intentional horizontal scroller. The header, title, price, main image, specifications and enquiry form stack within the phone viewport. Django system checks and the public-page smoke test passed.

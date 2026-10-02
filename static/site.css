@@ -34,3 +34,7 @@
 [data-theme="dark"] .message.error,[data-theme="dark"] .error-summary{background:#432923;color:#ffc2bb}
 [data-theme="dark"] .empty-number{color:#a6bcae}
 [data-theme="dark"] :focus-visible{outline-color:#f2cd77}
+
+/* Keep public content within narrow phone viewports. */
+html,body{max-width:100%}img,svg{max-width:100%}.main,.vehicle-title,.vehicle-title>div,.vehicle-layout,.vehicle-layout>section,.gallery{min-width:0;max-width:100%}.vehicle-title h1,.vehicle-title .eyebrow{overflow-wrap:anywhere}.gallery-main{max-width:100%}.gallery-thumbs{max-width:100%;overscroll-behavior-inline:contain}.public-footer div{flex-wrap:wrap}
+@media(max-width:600px){.public-header{padding:18px 16px;gap:20px}.public-header .brand{max-width:100%}.public-header nav{width:100%;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 14px;border-top:1px solid var(--line);padding-top:8px}.public-header nav a{display:flex;align-items:center;min-height:44px;overflow-wrap:anywhere}.public-header nav .theme-toggle{margin:4px 0;justify-self:start}.main{padding:26px 16px 48px}.vehicle-title{margin:24px 0 30px}.vehicle-title h1{font-size:clamp(2rem,11vw,2.45rem)}.price.large{font-size:clamp(1.8rem,9vw,2.2rem)}.gallery-main{aspect-ratio:auto;max-height:70vh;object-fit:contain}.gallery-thumbs{gap:10px}.thumb{flex-basis:82px}.thumb img{height:62px}.specifications{grid-template-columns:1fr}.enquiry-panel{padding:20px}.public-footer{padding:24px 16px}}
