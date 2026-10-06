@@ -146,6 +146,10 @@ def photo(request,public_id):
 def sitemap(request):
     from xml.sax.saxutils import escape
     urls=[settings.PUBLIC_ORIGIN+reverse('inventory')]
+    urls.append(settings.PUBLIC_ORIGIN+reverse('contact'))
+    urls.extend(settings.PUBLIC_ORIGIN+reverse('content',args=[slug]) for slug in ['how-it-works','privacy','terms'])
+    if SiteSettings.current().about:
+        urls.append(settings.PUBLIC_ORIGIN+reverse('content',args=['about']))
     urls.extend(settings.PUBLIC_ORIGIN+reverse('vehicle',args=[v]) for v in Vehicle.objects.public().values_list('public_id',flat=True))
     return HttpResponse('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+''.join('<url><loc>'+escape(u)+'</loc></url>' for u in urls)+'</urlset>',content_type='application/xml')
 
